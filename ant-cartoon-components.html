@@ -1,0 +1,1167 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ant Design 卡通风组件展示</title>
+  <link rel="preconnect" href="https://unpkg.com" />
+  <link rel="stylesheet" href="https://unpkg.com/antd@5.27.5/dist/reset.css" />
+  <style>
+    :root {
+      --bg-1: #fff7e8;
+      --bg-2: #f4fbff;
+      --line: #2f2a26;
+      --primary: #ff8a45;
+      --primary-2: #ffd666;
+      --blue: #7cc7ff;
+      --green: #95de64;
+      --pink: #ffadd2;
+      --purple: #d3adf7;
+      --shadow: 0 8px 0 rgba(47, 42, 38, 0.9);
+      --soft-shadow: 0 12px 24px rgba(47, 42, 38, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: #2f2a26;
+      background:
+        radial-gradient(circle at top left, #fff1b8 0, transparent 28%),
+        radial-gradient(circle at right 10% top 15%, #ffd6e7 0, transparent 18%),
+        radial-gradient(circle at left 15% bottom 15%, #bae0ff 0, transparent 18%),
+        linear-gradient(135deg, var(--bg-1), var(--bg-2));
+      min-height: 100vh;
+    }
+
+    .page-shell {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 28px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border: 3px solid var(--line);
+      border-radius: 32px;
+      background: linear-gradient(135deg, #fffef3 0%, #fff1f0 45%, #e6f7ff 100%);
+      box-shadow: var(--shadow), var(--soft-shadow);
+      padding: 32px;
+      margin-bottom: 28px;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border: 3px solid var(--line);
+      border-radius: 999px;
+      opacity: 0.9;
+    }
+
+    .hero::before {
+      width: 160px;
+      height: 160px;
+      background: #ffd666;
+      right: -36px;
+      top: -36px;
+      transform: rotate(-8deg);
+    }
+
+    .hero::after {
+      width: 86px;
+      height: 86px;
+      background: #91d5ff;
+      left: -16px;
+      bottom: -18px;
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .hero-title {
+      font-size: 42px;
+      line-height: 1.12;
+      margin: 0 0 12px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-desc {
+      margin: 0 0 18px;
+      font-size: 15px;
+      line-height: 1.8;
+      max-width: 760px;
+      color: #594f46;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border: 3px solid var(--line);
+      border-radius: 999px;
+      background: #ffffff;
+      box-shadow: 0 4px 0 rgba(47, 42, 38, 0.9);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .hero-preview {
+      border: 3px solid var(--line);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.86);
+      box-shadow: 0 8px 0 rgba(47, 42, 38, 0.9);
+      padding: 18px;
+      transform: rotate(-2deg);
+    }
+
+    .floating-chip-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .floating-chip {
+      padding: 8px 12px;
+      border-radius: 16px;
+      border: 3px solid var(--line);
+      font-size: 12px;
+      font-weight: 800;
+      background: #fff;
+    }
+
+    .section-note {
+      margin: 0 0 18px;
+      color: #6b5f55;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .cartoon-panel {
+      border: 3px solid var(--line);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: var(--shadow), var(--soft-shadow);
+      overflow: hidden;
+    }
+
+    .cartoon-panel .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 20px;
+      border-bottom: 3px solid rgba(47, 42, 38, 0.12);
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,247,232,0.96));
+    }
+
+    .panel-title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .panel-subtitle {
+      margin: 4px 0 0;
+      color: #7a7066;
+      font-size: 13px;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 24px;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .table-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .table-toolbar-left, .table-toolbar-right {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .kpi-card {
+      border: 3px solid var(--line);
+      border-radius: 22px;
+      padding: 14px 16px;
+      background: linear-gradient(180deg, #ffffff, #fffef6);
+      box-shadow: 0 6px 0 rgba(47, 42, 38, 0.88);
+    }
+
+    .kpi-card .kpi-label {
+      font-size: 12px;
+      font-weight: 800;
+      color: #6d6258;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .kpi-card .kpi-value {
+      font-size: 26px;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .kpi-card .kpi-extra {
+      font-size: 12px;
+      color: #7b7269;
+    }
+
+    .panel-content {
+      padding: 20px;
+    }
+
+    .table-wrap {
+      padding: 0 20px 20px;
+    }
+
+    .footer-note {
+      margin-top: 20px;
+      border: 3px dashed var(--line);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.72);
+      padding: 16px 18px;
+      color: #5f544a;
+      line-height: 1.8;
+      font-size: 13px;
+    }
+
+    .dot-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .dot-group span {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 3px solid var(--line);
+      display: inline-block;
+    }
+
+    .app-card-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 2px solid rgba(47, 42, 38, 0.6);
+      background: rgba(255,255,255,0.7);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .ant-card,
+    .ant-input,
+    .ant-input-affix-wrapper,
+    .ant-select-selector,
+    .ant-picker,
+    .ant-tabs-nav,
+    .ant-alert,
+    .ant-statistic,
+    .ant-table,
+    .ant-table-container,
+    .ant-table-thead > tr > th,
+    .ant-table-tbody > tr > td,
+    .ant-pagination .ant-pagination-item,
+    .ant-pagination .ant-pagination-prev,
+    .ant-pagination .ant-pagination-next,
+    .ant-segmented,
+    .ant-radio-button-wrapper,
+    .ant-btn,
+    .ant-tag,
+    .ant-badge-count,
+    .ant-progress-bg,
+    .ant-progress-inner,
+    .ant-empty-normal,
+    .ant-tabs-tab-btn,
+    .ant-tabs-ink-bar,
+    .ant-dropdown-menu,
+    .ant-list-bordered,
+    .ant-list-item,
+    .ant-collapse,
+    .ant-collapse-item,
+    .ant-collapse-header,
+    .ant-collapse-content {
+      border-radius: 18px !important;
+    }
+
+    .ant-btn {
+      border-width: 3px !important;
+      font-weight: 800;
+      box-shadow: 0 4px 0 rgba(47, 42, 38, 0.85);
+      height: auto;
+      padding-top: 9px;
+      padding-bottom: 9px;
+    }
+
+    .ant-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 rgba(47, 42, 38, 0.85);
+    }
+
+    .ant-card,
+    .ant-alert,
+    .ant-statistic,
+    .ant-tabs-nav,
+    .ant-segmented,
+    .ant-radio-group {
+      border: 3px solid rgba(47, 42, 38, 0.92) !important;
+      box-shadow: 0 6px 0 rgba(47, 42, 38, 0.88);
+    }
+
+    .ant-input,
+    .ant-input-affix-wrapper,
+    .ant-select-selector,
+    .ant-picker,
+    .ant-radio-button-wrapper,
+    .ant-pagination .ant-pagination-item,
+    .ant-pagination .ant-pagination-prev,
+    .ant-pagination .ant-pagination-next {
+      border-width: 3px !important;
+      box-shadow: 0 4px 0 rgba(47, 42, 38, 0.35);
+    }
+
+    .ant-table-wrapper .ant-table {
+      border: 3px solid rgba(47, 42, 38, 0.92);
+      box-shadow: 0 8px 0 rgba(47, 42, 38, 0.85);
+      overflow: hidden;
+    }
+
+    .ant-table-wrapper .ant-table-thead > tr > th {
+      border-bottom-width: 3px !important;
+      font-weight: 900;
+      background: linear-gradient(180deg, #fff7e6 0%, #fff1b8 100%) !important;
+    }
+
+    .ant-table-wrapper .ant-table-tbody > tr > td {
+      border-bottom: 2px dashed rgba(47, 42, 38, 0.18) !important;
+      background: rgba(255,255,255,0.9);
+    }
+
+    .ant-table-wrapper .ant-table-tbody > tr:hover > td {
+      background: #fffbe6 !important;
+    }
+
+    .ant-table-expanded-row > td {
+      background: linear-gradient(180deg, #fffef5 0%, #f6ffed 100%) !important;
+    }
+
+    .ant-tag {
+      border-width: 2px !important;
+      font-weight: 800;
+      padding-inline: 10px;
+    }
+
+    .ant-tabs-nav {
+      background: rgba(255,255,255,0.82);
+      padding: 8px;
+    }
+
+    .ant-card-head {
+      border-bottom: 2px dashed rgba(47, 42, 38, 0.18) !important;
+      min-height: 56px;
+    }
+
+    .ant-progress {
+      margin-bottom: 0;
+    }
+
+    .emoji {
+      display: inline-block;
+      transform: translateY(1px);
+      margin-right: 4px;
+    }
+
+    @media (max-width: 1100px) {
+      .hero-grid,
+      .demo-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .kpi-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 768px) {
+      .page-shell {
+        padding: 16px;
+      }
+
+      .hero {
+        padding: 22px;
+      }
+
+      .hero-title {
+        font-size: 30px;
+      }
+
+      .mini-grid,
+      .kpi-row {
+        grid-template-columns: 1fr;
+      }
+
+      .table-toolbar {
+        align-items: stretch;
+      }
+
+      .table-toolbar-left,
+      .table-toolbar-right {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/dayjs@1/dayjs.min.js"></script>
+  <script src="https://unpkg.com/antd@5.27.5/dist/antd.min.js"></script>
+  <script src="https://unpkg.com/@ant-design/icons@5.6.1/dist/index.umd.min.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+  <script type="text/babel">
+    const {
+      ConfigProvider,
+      App: AntApp,
+      Layout,
+      Typography,
+      Row,
+      Col,
+      Space,
+      Button,
+      Card,
+      Input,
+      Select,
+      DatePicker,
+      Radio,
+      Segmented,
+      Tabs,
+      Tag,
+      Badge,
+      Statistic,
+      Progress,
+      Alert,
+      Table,
+      Avatar,
+      Tooltip,
+      List,
+      Collapse,
+      Divider,
+      Switch,
+      theme,
+    } = antd;
+
+    const {
+      SearchOutlined,
+      PlusOutlined,
+      DownloadOutlined,
+      FilterOutlined,
+      RocketOutlined,
+      SmileOutlined,
+      ThunderboltOutlined,
+      CheckCircleOutlined,
+      ClockCircleOutlined,
+      FireOutlined,
+      ShoppingCartOutlined,
+      TeamOutlined,
+      AppstoreOutlined,
+      InboxOutlined,
+      HeartOutlined,
+      BarChartOutlined,
+      EditOutlined,
+      TrophyOutlined,
+    } = icons;
+
+    const { Title, Paragraph, Text } = Typography;
+
+    const rawData = [
+      {
+        key: '1',
+        product: '云朵记事本',
+        owner: 'Mika',
+        avatar: 'M',
+        category: '效率',
+        status: '进行中',
+        priority: '高',
+        region: '华东',
+        score: 92,
+        revenue: 189000,
+        growth: 23,
+        conversion: 7.1,
+        updatedAt: '2026-03-16',
+        tasks: 34,
+        progress: 78,
+        childrenText: '支持富文本、标签管理和多端同步，近期重点优化编辑器性能。',
+      },
+      {
+        key: '2',
+        product: '气泡商城',
+        owner: 'Ari',
+        avatar: 'A',
+        category: '零售',
+        status: '已完成',
+        priority: '中',
+        region: '华南',
+        score: 88,
+        revenue: 265000,
+        growth: 14,
+        conversion: 8.2,
+        updatedAt: '2026-03-15',
+        tasks: 18,
+        progress: 100,
+        childrenText: '完成大促版本上线，订单转化率在最近两周保持稳定。',
+      },
+      {
+        key: '3',
+        product: '像素伙伴',
+        owner: 'Juno',
+        avatar: 'J',
+        category: '社交',
+        status: '等待中',
+        priority: '低',
+        region: '华北',
+        score: 75,
+        revenue: 98000,
+        growth: -3,
+        conversion: 4.9,
+        updatedAt: '2026-03-12',
+        tasks: 9,
+        progress: 36,
+        childrenText: '等待法务确认活动规则，互动功能原型已评审通过。',
+      },
+      {
+        key: '4',
+        product: '星球工单台',
+        owner: 'Luca',
+        avatar: 'L',
+        category: '企业服务',
+        status: '进行中',
+        priority: '高',
+        region: '西南',
+        score: 95,
+        revenue: 312000,
+        growth: 31,
+        conversion: 9.4,
+        updatedAt: '2026-03-17',
+        tasks: 41,
+        progress: 84,
+        childrenText: '工单 SLA 监控已接入，接下来完善权限与报表导出。',
+      },
+      {
+        key: '5',
+        product: '软糖课堂',
+        owner: 'Nina',
+        avatar: 'N',
+        category: '教育',
+        status: '进行中',
+        priority: '中',
+        region: '华中',
+        score: 81,
+        revenue: 154000,
+        growth: 17,
+        conversion: 6.4,
+        updatedAt: '2026-03-14',
+        tasks: 22,
+        progress: 62,
+        childrenText: '课程推荐模型已上线 A/B 测试，留存仍需继续观察。',
+      },
+      {
+        key: '6',
+        product: '果冻日历',
+        owner: 'Owen',
+        avatar: 'O',
+        category: '效率',
+        status: '已完成',
+        priority: '低',
+        region: '华东',
+        score: 86,
+        revenue: 122000,
+        growth: 11,
+        conversion: 5.8,
+        updatedAt: '2026-03-11',
+        tasks: 12,
+        progress: 100,
+        childrenText: '支持共享排期和节日模板，自定义提醒体验较好。',
+      },
+    ];
+
+    const numberFormat = (value) => `¥${value.toLocaleString('zh-CN')}`;
+
+    function App() {
+      const [keyword, setKeyword] = React.useState('');
+      const [statusFilter, setStatusFilter] = React.useState('全部');
+      const [density, setDensity] = React.useState('middle');
+      const [bordered, setBordered] = React.useState(false);
+      const [currentTab, setCurrentTab] = React.useState('overview');
+
+      const filteredData = React.useMemo(() => {
+        return rawData.filter(item => {
+          const matchKeyword = !keyword || [item.product, item.owner, item.category, item.region].join(' ').toLowerCase().includes(keyword.toLowerCase());
+          const matchStatus = statusFilter === '全部' || item.status === statusFilter;
+          return matchKeyword && matchStatus;
+        });
+      }, [keyword, statusFilter]);
+
+      const totalRevenue = filteredData.reduce((sum, item) => sum + item.revenue, 0);
+      const avgScore = filteredData.length ? Math.round(filteredData.reduce((sum, item) => sum + item.score, 0) / filteredData.length) : 0;
+      const activeProjects = filteredData.filter(item => item.status === '进行中').length;
+      const completionRate = filteredData.length ? Math.round(filteredData.reduce((sum, item) => sum + item.progress, 0) / filteredData.length) : 0;
+
+      const columns = [
+        {
+          title: '产品 / 负责人',
+          dataIndex: 'product',
+          key: 'product',
+          fixed: 'left',
+          width: 240,
+          sorter: (a, b) => a.product.localeCompare(b.product),
+          render: (_, record) => (
+            <Space align="start">
+              <Avatar style={{ background: '#ffd666', color: '#2f2a26', border: '2px solid #2f2a26', fontWeight: 900 }}>
+                {record.avatar}
+              </Avatar>
+              <div>
+                <div style={{ fontWeight: 900 }}>{record.product}</div>
+                <Text type="secondary">{record.owner} · {record.region}</Text>
+              </div>
+            </Space>
+          ),
+        },
+        {
+          title: '分类',
+          dataIndex: 'category',
+          key: 'category',
+          filters: [
+            { text: '效率', value: '效率' },
+            { text: '零售', value: '零售' },
+            { text: '社交', value: '社交' },
+            { text: '企业服务', value: '企业服务' },
+            { text: '教育', value: '教育' },
+          ],
+          onFilter: (value, record) => record.category === value,
+          render: (value) => <Tag color="processing">{value}</Tag>,
+        },
+        {
+          title: '状态',
+          dataIndex: 'status',
+          key: 'status',
+          filters: [
+            { text: '进行中', value: '进行中' },
+            { text: '已完成', value: '已完成' },
+            { text: '等待中', value: '等待中' },
+          ],
+          onFilter: (value, record) => record.status === value,
+          render: (value) => {
+            const map = {
+              '进行中': { color: 'gold', icon: <ClockCircleOutlined /> },
+              '已完成': { color: 'success', icon: <CheckCircleOutlined /> },
+              '等待中': { color: 'default', icon: <InboxOutlined /> },
+            };
+            const cfg = map[value];
+            return <Tag icon={cfg.icon} color={cfg.color}>{value}</Tag>;
+          },
+        },
+        {
+          title: '优先级',
+          dataIndex: 'priority',
+          key: 'priority',
+          sorter: (a, b) => ['低', '中', '高'].indexOf(a.priority) - ['低', '中', '高'].indexOf(b.priority),
+          render: (value) => {
+            const color = value === '高' ? 'error' : value === '中' ? 'warning' : 'default';
+            return <Tag color={color}>{value}</Tag>;
+          },
+        },
+        {
+          title: '健康分',
+          dataIndex: 'score',
+          key: 'score',
+          sorter: (a, b) => a.score - b.score,
+          render: (value) => (
+            <Space>
+              <Progress percent={value} size="small" style={{ width: 110, marginBottom: 0 }} strokeLinecap="round" />
+              <Text strong>{value}</Text>
+            </Space>
+          ),
+        },
+        {
+          title: '收入',
+          dataIndex: 'revenue',
+          key: 'revenue',
+          sorter: (a, b) => a.revenue - b.revenue,
+          defaultSortOrder: 'descend',
+          render: (value) => <Text strong>{numberFormat(value)}</Text>,
+        },
+        {
+          title: '增长率',
+          dataIndex: 'growth',
+          key: 'growth',
+          sorter: (a, b) => a.growth - b.growth,
+          render: (value) => (
+            <Text style={{ color: value >= 0 ? '#389e0d' : '#cf1322', fontWeight: 800 }}>
+              {value >= 0 ? '+' : ''}{value}%
+            </Text>
+          ),
+        },
+        {
+          title: '转化率',
+          dataIndex: 'conversion',
+          key: 'conversion',
+          sorter: (a, b) => a.conversion - b.conversion,
+          render: (value) => `${value}%`,
+        },
+        {
+          title: '任务量',
+          dataIndex: 'tasks',
+          key: 'tasks',
+          sorter: (a, b) => a.tasks - b.tasks,
+          render: (value) => <Badge count={value} color="#ff85c0" />,
+        },
+        {
+          title: '更新日期',
+          dataIndex: 'updatedAt',
+          key: 'updatedAt',
+          sorter: (a, b) => dayjs(a.updatedAt).valueOf() - dayjs(b.updatedAt).valueOf(),
+          render: (value) => dayjs(value).format('MM-DD'),
+        },
+      ];
+
+      const tabItems = [
+        {
+          key: 'overview',
+          label: '组件总览',
+          children: (
+            <div className="stack">
+              <div className="mini-grid">
+                <Card title={<span className="app-card-title"><span><span className="emoji">🎯</span>按钮与状态</span><span className="tag-pill">高频</span></span>}>
+                  <Space wrap>
+                    <Button type="primary" icon={<RocketOutlined />}>主要按钮</Button>
+                    <Button icon={<SmileOutlined />}>默认按钮</Button>
+                    <Button danger icon={<FireOutlined />}>危险按钮</Button>
+                    <Button type="dashed" icon={<PlusOutlined />}>虚线按钮</Button>
+                  </Space>
+                  <Divider style={{ margin: '16px 0' }} />
+                  <Space wrap>
+                    <Tag color="processing">进行中</Tag>
+                    <Tag color="success">已上线</Tag>
+                    <Tag color="warning">待确认</Tag>
+                    <Badge count={9}><Button shape="round">消息</Button></Badge>
+                  </Space>
+                </Card>
+
+                <Card title={<span className="app-card-title"><span><span className="emoji">🧩</span>表单输入</span><span className="tag-pill">录入</span></span>}>
+                  <Space direction="vertical" style={{ width: '100%' }} size={12}>
+                    <Input prefix={<SearchOutlined />} placeholder="搜索组件或数据" />
+                    <Select
+                      style={{ width: '100%' }}
+                      defaultValue="卡通风主题"
+                      options={[
+                        { value: '卡通风主题', label: '卡通风主题' },
+                        { value: '插画风主题', label: '插画风主题' },
+                        { value: '玻璃风主题', label: '玻璃风主题' },
+                      ]}
+                    />
+                    <DatePicker style={{ width: '100%' }} />
+                  </Space>
+                </Card>
+
+                <Card title={<span className="app-card-title"><span><span className="emoji">📈</span>数据反馈</span><span className="tag-pill">反馈</span></span>}>
+                  <Row gutter={[12, 12]}>
+                    <Col span={12}><Statistic title="本周新增" value={128} prefix={<ThunderboltOutlined />} /></Col>
+                    <Col span={12}><Statistic title="转化提升" value={18.6} suffix="%" prefix={<BarChartOutlined />} /></Col>
+                  </Row>
+                  <Divider style={{ margin: '16px 0' }} />
+                  <Progress percent={76} status="active" />
+                </Card>
+
+                <Card title={<span className="app-card-title"><span><span className="emoji">🔔</span>提醒与提示</span><span className="tag-pill">信息</span></span>}>
+                  <Space direction="vertical" style={{ width: '100%' }} size={12}>
+                    <Alert message="样式说明" description="采用更高圆角、厚描边、强阴影和糖果色块来模拟首页的卡通视觉。" type="info" showIcon />
+                    <Alert message="表格重点" description="支持搜索、筛选、排序、横向滚动、展开行和汇总行。" type="success" showIcon />
+                  </Space>
+                </Card>
+              </div>
+            </div>
+          )
+        },
+        {
+          key: 'workflow',
+          label: '业务面板',
+          children: (
+            <div className="stack">
+              <Card title={<span className="app-card-title"><span><span className="emoji">🛠️</span>业务流程</span><span className="tag-pill">组合</span></span>}>
+                <Space direction="vertical" size={14} style={{ width: '100%' }}>
+                  <Segmented
+                    block
+                    options={[
+                      { label: '需求池', value: '需求池' },
+                      { label: '开发中', value: '开发中' },
+                      { label: '已发布', value: '已发布' },
+                    ]}
+                  />
+                  <Radio.Group defaultValue="week" optionType="button" buttonStyle="solid">
+                    <Radio.Button value="day">今日</Radio.Button>
+                    <Radio.Button value="week">本周</Radio.Button>
+                    <Radio.Button value="month">本月</Radio.Button>
+                  </Radio.Group>
+                  <List
+                    bordered
+                    dataSource={[
+                      '统一组件边框与阴影语义',
+                      '表格列操作区固定在右侧',
+                      '移动端卡片视图可按需补充',
+                    ]}
+                    renderItem={(item) => <List.Item>{item}</List.Item>}
+                  />
+                </Space>
+              </Card>
+              <Collapse
+                items={[
+                  {
+                    key: '1',
+                    label: '设计说明',
+                    children: '该页面偏向展示型后台风格，适合做组件示例页、设计演示页或产品数据看板。',
+                  },
+                  {
+                    key: '2',
+                    label: '表格能力',
+                    children: '排序、筛选、搜索、汇总、展开行、固定列、分页与尺寸切换均已示例。',
+                  },
+                ]}
+              />
+            </div>
+          )
+        }
+      ];
+
+      return (
+        <ConfigProvider
+          theme={{
+            algorithm: theme.defaultAlgorithm,
+            token: {
+              colorPrimary: '#ff8a45',
+              colorInfo: '#40a9ff',
+              colorSuccess: '#73d13d',
+              colorWarning: '#faad14',
+              colorError: '#ff4d4f',
+              colorBgLayout: '#fffaf0',
+              colorBgContainer: '#ffffff',
+              colorBorder: '#2f2a26',
+              colorText: '#2f2a26',
+              borderRadius: 22,
+              wireframe: false,
+              fontSize: 14,
+              boxShadow: '0 10px 22px rgba(47,42,38,.12)',
+            },
+            components: {
+              Button: {
+                borderRadius: 18,
+                primaryShadow: '0 4px 0 rgba(47,42,38,.9)',
+                defaultShadow: '0 4px 0 rgba(47,42,38,.9)',
+                contentFontSize: 14,
+              },
+              Card: { borderRadiusLG: 24, headerBg: '#fffef6' },
+              Table: {
+                borderColor: '#2f2a26',
+                headerBg: '#fff1b8',
+                rowHoverBg: '#fffbe6',
+                headerSplitColor: 'rgba(47,42,38,.25)',
+              },
+              Tabs: { itemActiveColor: '#2f2a26', itemSelectedColor: '#2f2a26', inkBarColor: '#2f2a26' },
+              Input: { activeBorderColor: '#2f2a26', hoverBorderColor: '#2f2a26' },
+              Select: { activeBorderColor: '#2f2a26', hoverBorderColor: '#2f2a26' },
+              Pagination: { itemActiveBg: '#ffd666' },
+              Progress: { defaultColor: '#ff8a45', remainingColor: '#fff1b8' },
+              Tag: { defaultBg: '#fff' },
+            },
+          }}
+        >
+          <AntApp>
+            <div className="page-shell">
+              <section className="hero">
+                <div className="hero-grid">
+                  <div>
+                    <div className="hero-badges">
+                      <span className="badge"><SmileOutlined /> 卡通视觉</span>
+                      <span className="badge"><AppstoreOutlined /> 常用组件</span>
+                      <span className="badge"><BarChartOutlined /> 表格优先</span>
+                    </div>
+                    <h1 className="hero-title">Ant Design 风格组件展示页</h1>
+                    <p className="hero-desc">
+                      用 CDN 方式引入 React、Ant Design 与图标资源，组合出一个偏首页「卡通风」的演示页面。
+                      重点区域放在数据表格：搜索、筛选、排序、汇总、展开、分页、密度切换都集中展示。
+                    </p>
+                    <Space wrap>
+                      <Button type="primary" size="large" icon={<RocketOutlined />}>立即预览</Button>
+                      <Button size="large" icon={<DownloadOutlined />}>CDN 方案</Button>
+                    </Space>
+                  </div>
+
+                  <div className="hero-preview">
+                    <div className="floating-chip-row">
+                      <span className="floating-chip" style={{ background: '#fff1b8' }}>圆角</span>
+                      <span className="floating-chip" style={{ background: '#ffd6e7' }}>厚描边</span>
+                      <span className="floating-chip" style={{ background: '#bae0ff' }}>强阴影</span>
+                    </div>
+                    <Card bordered={false} bodyStyle={{ padding: 18 }}>
+                      <Space direction="vertical" size={14} style={{ width: '100%' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <Text strong>组件热度</Text>
+                          <Tag color="magenta">Cartoon UI</Tag>
+                        </div>
+                        <Progress percent={84} status="active" />
+                        <Row gutter={[12, 12]}>
+                          <Col span={12}><Statistic title="表格使用率" value={91} suffix="%" prefix={<TrophyOutlined />} /></Col>
+                          <Col span={12}><Statistic title="录入场景" value={28} prefix={<EditOutlined />} /></Col>
+                        </Row>
+                      </Space>
+                    </Card>
+                  </div>
+                </div>
+              </section>
+
+              <section className="demo-grid">
+                <div className="cartoon-panel">
+                  <div className="panel-head">
+                    <div>
+                      <h2 className="panel-title">常用组件展示</h2>
+                      <p className="panel-subtitle">按钮、输入、提醒、统计、分段控制、折叠面板等常见组件组合。</p>
+                    </div>
+                    <div className="dot-group">
+                      <span style={{ background: '#ff7875' }}></span>
+                      <span style={{ background: '#ffd666' }}></span>
+                      <span style={{ background: '#95de64' }}></span>
+                    </div>
+                  </div>
+                  <div className="panel-content">
+                    <Tabs activeKey={currentTab} onChange={setCurrentTab} items={tabItems} />
+                  </div>
+                </div>
+
+                <div className="stack">
+                  <div className="cartoon-panel">
+                    <div className="panel-head">
+                      <div>
+                        <h2 className="panel-title">使用建议</h2>
+                        <p className="panel-subtitle">适合做设计稿演示、官网样式试验、组件文档首页。</p>
+                      </div>
+                    </div>
+                    <div className="panel-content">
+                      <Space direction="vertical" size={14} style={{ width: '100%' }}>
+                        <Alert showIcon type="warning" message="风格说明" description="这里不是直接复刻官方算法，而是用 Ant Design 主题 Token + 自定义 CSS 来近似卡通风表现。" />
+                        <Card size="small" title="推荐保留的视觉特征">
+                          <Space wrap>
+                            <Tag color="gold">大圆角</Tag>
+                            <Tag color="cyan">彩色背景</Tag>
+                            <Tag color="purple">黑色边框</Tag>
+                            <Tag color="green">低密度留白</Tag>
+                          </Space>
+                        </Card>
+                        <Card size="small" title="适合继续扩展的组件">
+                          <Space wrap>
+                            <Button icon={<ShoppingCartOutlined />}>表单页</Button>
+                            <Button icon={<TeamOutlined />}>成员管理</Button>
+                            <Button icon={<HeartOutlined />}>营销活动</Button>
+                          </Space>
+                        </Card>
+                      </Space>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section className="cartoon-panel">
+                <div className="panel-head">
+                  <div>
+                    <h2 className="panel-title">重点：表格组件展示</h2>
+                    <p className="panel-subtitle">以产品看板为例，展示后台场景中最常用的表格功能组合。</p>
+                  </div>
+                  <Space>
+                    <Switch checked={bordered} onChange={setBordered} />
+                    <Text strong>边框模式</Text>
+                  </Space>
+                </div>
+
+                <div className="panel-content">
+                  <p className="section-note">
+                    这个示例表格包含列排序、列筛选、文本搜索、固定列、横向滚动、展开行、分页和汇总行；
+                    页面还额外提供了密度切换与状态过滤，便于直接拿去做内部演示或组件说明页。
+                  </p>
+
+                  <div className="kpi-row">
+                    <div className="kpi-card">
+                      <div className="kpi-label">累计收入</div>
+                      <div className="kpi-value">{numberFormat(totalRevenue)}</div>
+                      <div className="kpi-extra">当前筛选结果的收入合计</div>
+                    </div>
+                    <div className="kpi-card">
+                      <div className="kpi-label">平均健康分</div>
+                      <div className="kpi-value">{avgScore}</div>
+                      <div className="kpi-extra">可用于项目优先级评估</div>
+                    </div>
+                    <div className="kpi-card">
+                      <div className="kpi-label">进行中项目</div>
+                      <div className="kpi-value">{activeProjects}</div>
+                      <div className="kpi-extra">状态为进行中的条目数量</div>
+                    </div>
+                    <div className="kpi-card">
+                      <div className="kpi-label">平均完成度</div>
+                      <div className="kpi-value">{completionRate}%</div>
+                      <div className="kpi-extra">按 progress 字段计算</div>
+                    </div>
+                  </div>
+
+                  <div className="table-toolbar">
+                    <div className="table-toolbar-left">
+                      <Input
+                        allowClear
+                        value={keyword}
+                        onChange={(e) => setKeyword(e.target.value)}
+                        prefix={<SearchOutlined />}
+                        placeholder="搜索产品、负责人、分类或区域"
+                        style={{ width: 280 }}
+                      />
+                      <Select
+                        value={statusFilter}
+                        onChange={setStatusFilter}
+                        style={{ width: 150 }}
+                        prefix={<FilterOutlined />}
+                        options={[
+                          { value: '全部', label: '全部状态' },
+                          { value: '进行中', label: '进行中' },
+                          { value: '已完成', label: '已完成' },
+                          { value: '等待中', label: '等待中' },
+                        ]}
+                      />
+                    </div>
+                    <div className="table-toolbar-right">
+                      <Segmented
+                        value={density}
+                        onChange={setDensity}
+                        options={[
+                          { label: '紧凑', value: 'small' },
+                          { label: '默认', value: 'middle' },
+                          { label: '宽松', value: 'large' },
+                        ]}
+                      />
+                      <Button icon={<DownloadOutlined />}>导出</Button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="table-wrap">
+                  <Table
+                    rowKey="key"
+                    columns={columns}
+                    dataSource={filteredData}
+                    size={density}
+                    bordered={bordered}
+                    pagination={{ pageSize: 5, showSizeChanger: false }}
+                    scroll={{ x: 1280 }}
+                    expandable={{
+                      expandedRowRender: (record) => (
+                        <Space direction="vertical" size={8} style={{ width: '100%' }}>
+                          <Text strong>项目说明</Text>
+                          <Text>{record.childrenText}</Text>
+                          <Space wrap>
+                            <Tag color="cyan">负责人：{record.owner}</Tag>
+                            <Tag color="purple">区域：{record.region}</Tag>
+                            <Tag color="gold">最后更新：{record.updatedAt}</Tag>
+                          </Space>
+                        </Space>
+                      )
+                    }}
+                    summary={(pageData) => {
+                      const revenueSum = pageData.reduce((sum, item) => sum + item.revenue, 0);
+                      const avgConv = pageData.length ? (pageData.reduce((sum, item) => sum + item.conversion, 0) / pageData.length).toFixed(2) : 0;
+                      return (
+                        <Table.Summary fixed>
+                          <Table.Summary.Row>
+                            <Table.Summary.Cell index={0}><Text strong>当前页汇总</Text></Table.Summary.Cell>
+                            <Table.Summary.Cell index={1} colSpan={4}><Text type="secondary">用于演示 summary 固定汇总行</Text></Table.Summary.Cell>
+                            <Table.Summary.Cell index={5}><Text strong>{numberFormat(revenueSum)}</Text></Table.Summary.Cell>
+                            <Table.Summary.Cell index={6}><Text strong>{pageData.length} 项</Text></Table.Summary.Cell>
+                            <Table.Summary.Cell index={7}><Text strong>{avgConv}%</Text></Table.Summary.Cell>
+                            <Table.Summary.Cell index={8} colSpan={2}><Text strong>动态统计</Text></Table.Summary.Cell>
+                          </Table.Summary.Row>
+                        </Table.Summary>
+                      );
+                    }}
+                  />
+
+                  <div className="footer-note">
+                    <strong>实现说明：</strong>
+                    整个页面只依赖 CDN 资源：React、ReactDOM、dayjs、Ant Design、Ant Design Icons、Babel Standalone。
+                    其中卡通感主要来自自定义 CSS：更厚的边框、明显的投影、更大的圆角以及糖果色背景，而表格仍然使用 Ant Design 原生 Table 组件来承担核心交互。
+                  </div>
+                </div>
+              </section>
+            </div>
+          </AntApp>
+        </ConfigProvider>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
