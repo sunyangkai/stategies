@@ -24,8 +24,8 @@ export type ProjectRecord = {
 
 export const heroBadges = [
   { key: 'visual', label: '卡通视觉' },
-  { key: 'modules', label: '通用模块' },
-  { key: 'table', label: '表格模板' },
+  { key: 'modules', label: '模板复用' },
+  { key: 'table', label: '数据看板' },
 ]
 
 export const heroChips = [
@@ -35,8 +35,8 @@ export const heroChips = [
 ]
 
 export const heroActions = [
-  { key: 'preview', label: '预览模板', type: 'primary' as const },
-  { key: 'guide', label: '查看规范', type: 'default' as const },
+  { key: 'preview', label: '查看模板', type: 'primary' as const },
+  { key: 'guide', label: '设计说明', type: 'default' as const },
 ]
 
 export const showcaseCards: ShowcaseCardConfig[] = [
@@ -57,7 +57,7 @@ export const showcaseCards: ShowcaseCardConfig[] = [
     key: 'stats',
     kind: 'stats',
     title: '数据反馈',
-    pill: '反馈',
+    pill: '分析',
     primaryStat: { title: '本周新增', value: 128 },
     secondaryStat: { title: '转化提升', value: 18.6, suffix: '%' },
     progress: 76,
@@ -66,19 +66,19 @@ export const showcaseCards: ShowcaseCardConfig[] = [
     key: 'alerts',
     kind: 'alerts',
     title: '提醒与说明',
-    pill: '信息',
+    pill: '规范',
     alerts: [
       {
         key: 'style',
         type: 'info',
-        title: '样式说明',
-        description: '统一使用大圆角、厚描边、卡片投影和糖果配色，让页面默认呈现稳定的卡通风格。',
+        title: '样式策略',
+        description: '视觉统一收敛在公共 CSS 与 Ant Design Theme，业务页面不再单独维护零散样式。',
       },
       {
         key: 'template',
         type: 'success',
-        title: '模板建议',
-        description: '后续页面优先复用 Hero、Panel、KPI 和 Table 模板，只替换文案与数据。',
+        title: '模板策略',
+        description: '后续页面优先复用 Hero、Panel、KPI 与 Table 模板块，只替换文案、字段和数据源。',
       },
     ],
   },
@@ -88,19 +88,19 @@ export const workflowConfig: WorkflowSectionConfig = {
   segmentedOptions: ['需求池', '开发中', '已发布'],
   listItems: [
     '统一组件边框、阴影和圆角语言',
-    '页面优先拆为 Hero、Panel、KPI、Table 四类模板块',
-    '业务页面尽量只维护数据源和模块顺序',
+    '优先复用 Hero、Panel、KPI、Table 四类模板块',
+    '业务页面尽量只维护数据源、字段定义和模块顺序',
   ],
   collapseItems: [
     {
       key: '1',
-      label: '如何复用',
-      children: '页面只负责选择模板块、组织模块顺序，并提供接口数据或 mock 数据。',
+      label: '怎么复用这套页面',
+      children: '页面层主要负责拼模板和接数据，视觉细节由公共主题和通用样式兜底。',
     },
     {
       key: '2',
-      label: '样式归属',
-      children: '主题 Token 与公共 CSS 负责全局观感，业务页面不再直接写零散样式。',
+      label: '为什么这么拆',
+      children: '这样做可以降低页面维护成本，让后续扩展更接近“换模板 + 换数据”，而不是重新写一页。',
     },
   ],
 }
@@ -176,7 +176,7 @@ export const projects: ProjectRecord[] = [
     updatedAt: '2026-03-17',
     tasks: 41,
     progress: 84,
-    summary: '工单 SLA 监控已接入，下一步完善权限与报表导出。',
+    summary: '工单 SLA 监控已接入，下一步完善权限体系与报表导出。',
   },
   {
     key: '5',
@@ -194,7 +194,7 @@ export const projects: ProjectRecord[] = [
     updatedAt: '2026-03-14',
     tasks: 22,
     progress: 62,
-    summary: '课程推荐模型已上线 A/B 测试，留存表现仍需观察。',
+    summary: '课程推荐模型已上线 A/B 测试，留存表现仍需继续观察。',
   },
   {
     key: '6',
@@ -212,6 +212,6 @@ export const projects: ProjectRecord[] = [
     updatedAt: '2026-03-11',
     tasks: 12,
     progress: 100,
-    summary: '共享排期和节日模板已经落地，自定义提醒体验较好。',
+    summary: '共享排期和节日模板已经落地，自定义提醒体验表现稳定。',
   },
 ]

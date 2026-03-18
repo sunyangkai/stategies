@@ -90,7 +90,7 @@ export type DataTableSectionProps<T extends { key: string }> = {
   columns: TableColumnsType<T>
   dataSource: T[]
   expandedRowRender: (record: T) => ReactNode
-  summary: (pageData: readonly T[]) => ReactNode
+  summary?: (pageData: readonly T[]) => ReactNode
 }
 
 export function ShowcaseCardGrid({ cards }: { cards: ShowcaseCardConfig[] }) {
@@ -110,11 +110,7 @@ export function ShowcaseCardGrid({ cards }: { cards: ShowcaseCardConfig[] }) {
             >
               <Space direction="vertical" style={{ width: '100%' }} size={12}>
                 <Input prefix={<SearchOutlined />} placeholder={card.searchPlaceholder} />
-                <Select
-                  style={{ width: '100%' }}
-                  defaultValue={card.selectDefault}
-                  options={card.selectOptions}
-                />
+                <Select style={{ width: '100%' }} defaultValue={card.selectDefault} options={card.selectOptions} />
                 <DatePicker style={{ width: '100%' }} />
               </Space>
             </Card>
@@ -237,36 +233,41 @@ export function DataTableSection<T extends { key: string }>(props: DataTableSect
 
       <CartoonKpiRow items={kpis} />
 
-      <div className="cartoon-toolbar">
-        <div className="cartoon-toolbar-group">
+      <div className="cartoon-toolbar-shell">
+        <div className="cartoon-toolbar">
+          <div className="cartoon-toolbar-group">
           <Input
+            className="cartoon-toolbar-search"
             allowClear
             value={keyword}
             onChange={(event) => onKeywordChange(event.target.value)}
             prefix={<SearchOutlined />}
             placeholder={keywordPlaceholder}
-            style={{ width: 280 }}
+            style={{ width: 300 }}
           />
           <Select
+            className="cartoon-toolbar-filter"
             value={statusFilter}
             onChange={onStatusFilterChange}
-            style={{ width: 150 }}
+            style={{ width: 160 }}
             prefix={<FilterOutlined />}
             options={statusOptions.map((item) => ({ value: item.value, label: item.label }))}
-          />
-        </div>
+            />
+          </div>
 
-        <div className="cartoon-toolbar-group">
+          <div className="cartoon-toolbar-group">
           <Segmented
+            className="cartoon-toolbar-density"
             value={density}
             onChange={(value) => onDensityChange(value as 'small' | 'middle' | 'large')}
             options={[
-              { label: '紧凑', value: 'small' },
-              { label: '默认', value: 'middle' },
-              { label: '宽松', value: 'large' },
-            ]}
-          />
-          <Button icon={<DownloadOutlined />}>导出</Button>
+                { label: '紧凑', value: 'small' },
+                { label: '默认', value: 'middle' },
+                { label: '宽松', value: 'large' },
+              ]}
+            />
+            <Button icon={<DownloadOutlined />}>导出视图</Button>
+          </div>
         </div>
       </div>
 
@@ -297,17 +298,15 @@ export function ProjectIdentityCell({
   region: string
 }) {
   return (
-    <Space align="start">
-      <Avatar style={{ background: '#ffd666', color: '#2f2a26', border: '2px solid #2f2a26', fontWeight: 900 }}>
-        {avatar}
-      </Avatar>
+    <div className="cartoon-identity-cell">
+      <Avatar className="cartoon-identity-avatar">{avatar}</Avatar>
       <div>
-        <div style={{ fontWeight: 900 }}>{product}</div>
+        <div className="cartoon-identity-title">{product}</div>
         <Text type="secondary">
           {owner} · {region}
         </Text>
       </div>
-    </Space>
+    </div>
   )
 }
 

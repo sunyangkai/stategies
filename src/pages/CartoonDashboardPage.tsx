@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Alert, Button, Card, Col, Progress, Row, Space, Statistic, Table, Tabs, Tag } from 'antd'
+import { Alert, Button, Card, Col, Progress, Row, Space, Statistic, Tabs, Tag } from 'antd'
 import type { TableColumnsType } from 'antd'
 import {
   AppstoreOutlined,
@@ -47,7 +47,6 @@ export function CartoonDashboardPage() {
           .toLowerCase()
           .includes(keyword.toLowerCase())
       const matchStatus = statusFilter === '全部' || item.status === statusFilter
-
       return matchKeyword && matchStatus
     })
   }, [keyword, statusFilter])
@@ -64,8 +63,8 @@ export function CartoonDashboardPage() {
 
     return [
       { label: '累计收入', value: currency(totalRevenue), extra: '当前筛选结果的收入汇总' },
-      { label: '平均健康度', value: avgScore, extra: '可用于项目优先级评估' },
-      { label: '进行中项目', value: activeProjects, extra: '状态为进行中的条目数量' },
+      { label: '平均健康度', value: avgScore, extra: '用于快速判断项目状态' },
+      { label: '进行中项目', value: activeProjects, extra: '仍在推进中的核心条目数量' },
       { label: '平均完成度', value: `${completionRate}%`, extra: '按 progress 字段计算' },
     ]
   }, [filteredData])
@@ -76,7 +75,7 @@ export function CartoonDashboardPage() {
       dataIndex: 'product',
       key: 'product',
       fixed: 'left',
-      width: 240,
+      width: 260,
       sorter: (a, b) => a.product.localeCompare(b.product),
       render: (_, record) => (
         <ProjectIdentityCell
@@ -177,8 +176,8 @@ export function CartoonDashboardPage() {
           icon: index === 0 ? <SmileOutlined /> : index === 1 ? <AppstoreOutlined /> : <BarChartOutlined />,
         }))}
         chips={heroChips}
-        title="Ant Cartoon 组件模板库"
-        description="现在页面结构已经继续抽到模板层。后续新增页面时，优先写配置、数据和列定义，而不是在业务页面里重新组织样式和复杂组件结构。"
+        title="Ant Cartoon 页面模板库"
+        description="这套页面已经收敛成模板层、数据层和主题层。后续新增页面时，优先替换模块配置、字段定义和业务数据，而不是重新组织视觉样式。"
         actions={
           <Space wrap>
             {heroActions.map((action) => (
@@ -217,20 +216,20 @@ export function CartoonDashboardPage() {
       <div className="cartoon-grid cartoon-grid-main">
         <CartoonPanel
           title="模板组件展示"
-          subtitle="业务页面优先改数据和布局，不再重复写样式。"
+          subtitle="这里展示可复用的页面模板块，业务页面优先改数据和结构，不再重复写样式。"
           extra={<CartoonWindowDots />}
         >
           <Tabs activeKey={currentTab} onChange={setCurrentTab} items={tabs} />
         </CartoonPanel>
 
         <div className="cartoon-stack">
-          <CartoonPanel title="使用建议" subtitle="模板、数据、样式分层后，页面职责更清晰。">
+          <CartoonPanel title="使用建议" subtitle="这一列只保留高价值说明，避免页面信息过载。">
             <Space direction="vertical" size={14} style={{ width: '100%' }}>
               <Alert
                 showIcon
                 type="warning"
                 message="样式层"
-                description="所有卡通风格集中到公共 CSS 和 AntD theme，业务代码尽量不写零散视觉规则。"
+                description="所有卡通风格收敛到公共 CSS 和 AntD theme，业务代码尽量不再添加零散视觉规则。"
               />
               <Card size="small" title="推荐保留的视觉特征">
                 <Space wrap>
@@ -254,8 +253,8 @@ export function CartoonDashboardPage() {
 
       <DataTableSection<ProjectRecord>
         title="重点：数据表格模板"
-        subtitle="保留统一模板后，后续页面只替换列定义、筛选项和数据源。"
-        note="这个示例表格包含搜索、筛选、分页、汇总、展开行和密度切换。以后做新页面时，建议沿用模板并直接替换数据配置。"
+        subtitle="当前表格已经是标准模板。后续页面只需要替换列定义、筛选项和数据源。"
+        note="这个示例保留了搜索、筛选、分页、汇总、展开行和密度切换。建议后续页面沿用模板骨架，不要再单独拼一套表格样式。"
         keyword={keyword}
         onKeywordChange={setKeyword}
         keywordPlaceholder="搜索产品、负责人、分类或区域"
@@ -273,52 +272,21 @@ export function CartoonDashboardPage() {
         columns={columns}
         dataSource={filteredData}
         expandedRowRender={(record) => (
-          <Space direction="vertical" size={8} style={{ width: '100%' }}>
-            <span style={{ fontWeight: 700 }}>项目说明</span>
+          <div className="cartoon-expanded-panel">
+            <span className="cartoon-expanded-title">项目说明</span>
             <span>{record.summary}</span>
             <Space wrap>
               <Tag color="cyan">负责人：{record.owner}</Tag>
               <Tag color="purple">区域：{record.region}</Tag>
               <Tag color="gold">最后更新：{record.updatedAt}</Tag>
             </Space>
-          </Space>
+          </div>
         )}
-        summary={(pageData) => {
-          const revenueSum = pageData.reduce((sum, item) => sum + item.revenue, 0)
-          const avgConv = pageData.length
-            ? (pageData.reduce((sum, item) => sum + item.conversion, 0) / pageData.length).toFixed(2)
-            : '0.00'
-
-          return (
-            <Table.Summary fixed>
-              <Table.Summary.Row>
-                <Table.Summary.Cell index={0}>
-                  <span style={{ fontWeight: 700 }}>当前页汇总</span>
-                </Table.Summary.Cell>
-                <Table.Summary.Cell index={1} colSpan={4}>
-                  <span style={{ color: '#8c8c8c' }}>表格模板可直接复用，只需替换数据和列定义。</span>
-                </Table.Summary.Cell>
-                <Table.Summary.Cell index={5}>
-                  <span style={{ fontWeight: 700 }}>{currency(revenueSum)}</span>
-                </Table.Summary.Cell>
-                <Table.Summary.Cell index={6}>
-                  <span style={{ fontWeight: 700 }}>{pageData.length} 项</span>
-                </Table.Summary.Cell>
-                <Table.Summary.Cell index={7}>
-                  <span style={{ fontWeight: 700 }}>{avgConv}%</span>
-                </Table.Summary.Cell>
-                <Table.Summary.Cell index={8}>
-                  <span style={{ fontWeight: 700 }}>动态统计</span>
-                </Table.Summary.Cell>
-              </Table.Summary.Row>
-            </Table.Summary>
-          )
-        }}
       />
 
       <div className="cartoon-footer-note">
         <strong>当前结构：</strong>
-        页面入口只负责挂载主题和模板页。具体页面由模板块组合而成，业务上主要维护数据、文案和列定义。
+        页面入口负责挂载主题，页面模板负责组织模块，数据文件负责业务内容。这一层级已经适合继续扩展多页面模板。
       </div>
     </CartoonPageShell>
   )

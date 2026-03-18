@@ -31,6 +31,8 @@ export const cartoonTheme: ThemeConfig = {
       headerBg: '#fff1b8',
       rowHoverBg: '#fffbe6',
       headerSplitColor: 'rgba(47,42,38,.25)',
+      cellPaddingBlock: 14,
+      cellPaddingInline: 16,
     },
     Tabs: {
       itemActiveColor: '#2f2a26',
@@ -42,5 +44,6 @@ export const cartoonTheme: ThemeConfig = {
     Pagination: { itemActiveBg: '#ffd666' },
     Progress: { defaultColor: '#ff8a45', remainingColor: '#fff1b8' },
     Tag: { defaultBg: '#fff' },
+    Segmented: { trackBg: '#fff8e7', itemSelectedBg: '#ffe7a3' },
   },
 }
