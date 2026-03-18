@@ -36,7 +36,6 @@ export function CartoonDashboardPage() {
   const [keyword, setKeyword] = useState('')
   const [statusFilter, setStatusFilter] = useState<'全部' | ProjectRecord['status']>('全部')
   const [density, setDensity] = useState<'small' | 'middle' | 'large'>('middle')
-  const [bordered, setBordered] = useState(false)
   const [currentTab, setCurrentTab] = useState('components')
 
   const filteredData = useMemo(() => {
@@ -195,7 +194,7 @@ export function CartoonDashboardPage() {
           </Space>
         }
         preview={
-          <Card bordered={false} bodyStyle={{ padding: 18 }}>
+          <Card bordered={false} styles={{ body: { padding: 18 } }}>
             <Space direction="vertical" size={14} style={{ width: '100%' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ fontWeight: 700 }}>模板复用率</span>
@@ -257,8 +256,6 @@ export function CartoonDashboardPage() {
         title="重点：数据表格模板"
         subtitle="保留统一模板后，后续页面只替换列定义、筛选项和数据源。"
         note="这个示例表格包含搜索、筛选、分页、汇总、展开行和密度切换。以后做新页面时，建议沿用模板并直接替换数据配置。"
-        bordered={bordered}
-        onBorderedChange={setBordered}
         keyword={keyword}
         onKeywordChange={setKeyword}
         keywordPlaceholder="搜索产品、负责人、分类或区域"

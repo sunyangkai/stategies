@@ -17,7 +17,6 @@ import {
   Select,
   Space,
   Statistic,
-  Switch,
   Table,
   Tag,
   Typography,
@@ -79,8 +78,6 @@ export type DataTableSectionProps<T extends { key: string }> = {
   title: string
   subtitle: string
   note: string
-  bordered: boolean
-  onBorderedChange: (checked: boolean) => void
   keyword: string
   onKeywordChange: (value: string) => void
   keywordPlaceholder: string
@@ -92,8 +89,8 @@ export type DataTableSectionProps<T extends { key: string }> = {
   kpis: Array<{ label: string; value: ReactNode; extra: string }>
   columns: TableColumnsType<T>
   dataSource: T[]
-  expandedRowRender: (record: T) => React.ReactNode
-  summary: (pageData: readonly T[]) => React.ReactNode
+  expandedRowRender: (record: T) => ReactNode
+  summary: (pageData: readonly T[]) => ReactNode
 }
 
 export function ShowcaseCardGrid({ cards }: { cards: ShowcaseCardConfig[] }) {
@@ -137,10 +134,20 @@ export function ShowcaseCardGrid({ cards }: { cards: ShowcaseCardConfig[] }) {
             >
               <Row gutter={[12, 12]}>
                 <Col span={12}>
-                  <Statistic title={card.primaryStat.title} value={card.primaryStat.value} suffix={card.primaryStat.suffix} prefix={<ThunderboltOutlined />} />
+                  <Statistic
+                    title={card.primaryStat.title}
+                    value={card.primaryStat.value}
+                    suffix={card.primaryStat.suffix}
+                    prefix={<ThunderboltOutlined />}
+                  />
                 </Col>
                 <Col span={12}>
-                  <Statistic title={card.secondaryStat.title} value={card.secondaryStat.value} suffix={card.secondaryStat.suffix} prefix={<BarChartOutlined />} />
+                  <Statistic
+                    title={card.secondaryStat.title}
+                    value={card.secondaryStat.value}
+                    suffix={card.secondaryStat.suffix}
+                    prefix={<BarChartOutlined />}
+                  />
                 </Col>
               </Row>
               <Divider style={{ margin: '16px 0' }} />
@@ -209,8 +216,6 @@ export function DataTableSection<T extends { key: string }>(props: DataTableSect
     title,
     subtitle,
     note,
-    bordered,
-    onBorderedChange,
     keyword,
     onKeywordChange,
     keywordPlaceholder,
@@ -227,16 +232,7 @@ export function DataTableSection<T extends { key: string }>(props: DataTableSect
   } = props
 
   return (
-    <CartoonPanel
-      title={title}
-      subtitle={subtitle}
-      extra={
-        <Space>
-          <Switch checked={bordered} onChange={onBorderedChange} />
-          <Text strong>边框模式</Text>
-        </Space>
-      }
-    >
+    <CartoonPanel title={title} subtitle={subtitle}>
       <p className="cartoon-note">{note}</p>
 
       <CartoonKpiRow items={kpis} />
@@ -275,11 +271,11 @@ export function DataTableSection<T extends { key: string }>(props: DataTableSect
       </div>
 
       <Table<T>
+        className="cartoon-data-table"
         rowKey="key"
         columns={columns}
         dataSource={dataSource}
         size={density}
-        bordered={bordered}
         pagination={{ pageSize: 5, showSizeChanger: false }}
         scroll={{ x: 1180 }}
         expandable={{ expandedRowRender }}
