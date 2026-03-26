@@ -1,12 +1,12 @@
 import { App as AntApp, ConfigProvider } from 'antd'
-import { CartoonDashboardPage } from './pages/CartoonDashboardPage'
+import { Zgpa2026Q3Page } from './pages/zgpa'
 import { cartoonTheme } from './theme/cartoonTheme'
 
 export default function App() {
   return (
     <ConfigProvider theme={cartoonTheme}>
       <AntApp>
-        <CartoonDashboardPage />
+        <Zgpa2026Q3Page />
       </AntApp>
     </ConfigProvider>
   )
