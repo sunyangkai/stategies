@@ -101,6 +101,19 @@ export type PECalculatorConfig = {
   theta?: number
 }
 
+export type TrackingItem = {
+  rank: string
+  target: string
+  whyImportant: string
+  evaluationMethod: string
+  dataSource: string
+}
+
+export type TrackingItems = {
+  title: string
+  items: TrackingItem[]
+}
+
 export type ProfitForecast = {
   title: string
   years: string[]
@@ -113,6 +126,7 @@ export type ProfitForecast = {
 }
 
 type CompanyProfitForecastModule = ProfitForecast | { default: ProfitForecast }
+type CompanyTrackingItemsModule = TrackingItems | { default: TrackingItems }
 
 export type FinancialAnalysisItem = {
   title: string
@@ -136,6 +150,7 @@ export type CompanyDataset = {
   profitForecast?: ProfitForecast
   financialAnalysis?: FinancialAnalysis
   peCalculator?: PECalculatorConfig
+  trackingItems?: TrackingItems
 }
 
 function loadCompanyDatasets() {
@@ -143,6 +158,7 @@ function loadCompanyDatasets() {
   const forecastContext = require.context('./', true, /profitForecast\.json$/)
   const analysisContext = require.context('./', true, /financialAnalysis\.json$/)
   const peContext = require.context('./', true, /peCalculator\.json$/)
+  const trackingContext = require.context('./', true, /trackingItems\.json$/)
   const datasets = tableContext.keys().reduce<Record<string, CompanyDataset>>((result, path) => {
     const match = path.match(/^\.\/([^/]+)\/table\.json$/)
 
@@ -223,6 +239,27 @@ function loadCompanyDatasets() {
     }
 
     datasets[secucode].peCalculator = peCalculator
+  })
+
+  trackingContext.keys().forEach((path) => {
+    const match = path.match(/^\.\/([^/]+)\/trackingItems\.json$/)
+
+    if (!match) {
+      return
+    }
+
+    const secucode = match[1]
+    const module = trackingContext<CompanyTrackingItemsModule>(path)
+    const trackingItems = 'default' in module ? module.default : module
+
+    if (!datasets[secucode]) {
+      datasets[secucode] = {
+        secucode,
+        statements: {},
+      }
+    }
+
+    datasets[secucode].trackingItems = trackingItems
   })
 
   return datasets

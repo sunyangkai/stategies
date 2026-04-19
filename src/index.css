@@ -171,6 +171,12 @@ body {
   border: 1px solid rgba(31, 92, 63, 0.1);
 }
 
+.tracking-item-text {
+  color: var(--muted);
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
 .analysis-intro,
 .analysis-paragraph {
   margin: 0 !important;

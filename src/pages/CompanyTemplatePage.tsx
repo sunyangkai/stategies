@@ -3,6 +3,7 @@ import { FinancialAnalysisCard } from '../components/FinancialAnalysisCard'
 import { FinancialStatementsTabs } from '../components/FinancialStatementsTabs'
 import { PECalculator } from '../components/PECalculator'
 import { ProfitForecastCard } from '../components/ProfitForecastCard'
+import { TrackingItemsCard } from '../components/TrackingItemsCard'
 import type { CompanyDataset } from '../data'
 
 const { Content } = Layout
@@ -24,6 +25,7 @@ export function CompanyTemplatePage({ dataset, secucode }: CompanyTemplatePagePr
                 <FinancialStatementsTabs statements={dataset.statements} />
                 <FinancialAnalysisCard analysis={dataset.financialAnalysis} />
                 <ProfitForecastCard forecast={dataset.profitForecast} />
+                <TrackingItemsCard trackingItems={dataset.trackingItems} />
               </Space>
             ) : (
               <Alert
