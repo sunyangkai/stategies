@@ -1,6 +1,8 @@
 import { Alert, Col, Layout, Row, Space } from 'antd'
+import { FinancialAnalysisCard } from '../components/FinancialAnalysisCard'
 import { FinancialStatementsTabs } from '../components/FinancialStatementsTabs'
 import { PECalculator } from '../components/PECalculator'
+import { ProfitForecastCard } from '../components/ProfitForecastCard'
 import type { CompanyDataset } from '../data'
 
 const { Content } = Layout
@@ -18,8 +20,10 @@ export function CompanyTemplatePage({ dataset, secucode }: CompanyTemplatePagePr
           <Col xs={24} xl={18}>
             {dataset ? (
               <Space direction="vertical" size={24} style={{ display: 'flex' }}>
-                <PECalculator />
+                <PECalculator config={dataset.peCalculator} />
                 <FinancialStatementsTabs statements={dataset.statements} />
+                <FinancialAnalysisCard analysis={dataset.financialAnalysis} />
+                <ProfitForecastCard forecast={dataset.profitForecast} />
               </Space>
             ) : (
               <Alert

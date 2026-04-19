@@ -117,6 +117,114 @@ body {
   background: rgba(175, 123, 47, 0.08) !important;
 }
 
+.statement-yoy-up {
+  color: #c0392b !important;
+  font-size: 12px;
+}
+
+.statement-yoy-down {
+  color: #1f7a4c !important;
+  font-size: 12px;
+}
+
+.statement-yoy-neutral {
+  font-size: 12px;
+}
+
+.forecast-note-block {
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(255, 253, 248, 0.78);
+}
+
+.forecast-note-paragraph {
+  margin: 0 !important;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.profit-bridge-text {
+  color: var(--muted);
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+.profit-bridge-contribution {
+  color: var(--brand) !important;
+}
+
+.profit-bridge-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.profit-bridge-summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(31, 92, 63, 0.06);
+  border: 1px solid rgba(31, 92, 63, 0.1);
+}
+
+.analysis-intro,
+.analysis-paragraph {
+  margin: 0 !important;
+  color: var(--muted);
+  line-height: 1.9;
+}
+
+.analysis-table {
+  margin-top: 16px;
+}
+
+.analysis-table-list {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--muted);
+  line-height: 1.9;
+}
+
+.analysis-table-list li + li {
+  margin-top: 8px;
+}
+
+.analysis-takeaway {
+  color: var(--text);
+  font-weight: 600;
+  line-height: 1.8;
+}
+
+.analysis-row-takeaway {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, rgba(31, 92, 63, 0.12) 0%, rgba(175, 123, 47, 0.1) 100%);
+  border: 1px solid rgba(31, 92, 63, 0.14);
+}
+
+.analysis-row-takeaway-label {
+  flex: 0 0 auto;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #1f5c3f;
+  color: #fff !important;
+}
+
+.analysis-conclusion-block {
+  margin-top: 20px;
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(255, 253, 248, 0.78);
+}
+
 @media (max-width: 768px) {
   .app-content,
   .report-content,

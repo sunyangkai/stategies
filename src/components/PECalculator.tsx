@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Alert, Button, Card, Col, Form, InputNumber, Modal, Row, Space, Statistic, Typography } from 'antd'
 import { calcPE } from '../lib/calcPE'
+import type { PECalculatorConfig } from '../data'
 
 const { Paragraph, Text } = Typography
 
@@ -22,7 +23,7 @@ type FormValues = {
   theta: number
 }
 
-const initialValues: FormValues = {
+const defaultValues: FormValues = {
   np0: 51.55,
   g1: 0.08,
   g2: 0.06,
@@ -40,6 +41,10 @@ const initialValues: FormValues = {
   theta: 0.9,
 }
 
+type PECalculatorProps = {
+  config?: PECalculatorConfig
+}
+
 function formatPercent(value?: number) {
   if (typeof value !== 'number' || Number.isNaN(value)) {
     return '--'
@@ -48,7 +53,12 @@ function formatPercent(value?: number) {
   return `${(value * 100).toFixed(2)}%`
 }
 
-export function PECalculator() {
+export function PECalculator({ config }: PECalculatorProps) {
+  const initialValues: FormValues = {
+    ...defaultValues,
+    ...config,
+  }
+
   const [form] = Form.useForm<FormValues>()
   const [values, setValues] = useState<FormValues>(initialValues)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -109,7 +119,14 @@ export function PECalculator() {
           <Button type="primary" onClick={() => setIsModalOpen(true)}>
             查看详情
           </Button>
-          <Button onClick={() => form.resetFields()}>恢复默认参数</Button>
+          <Button
+            onClick={() => {
+              form.setFieldsValue(initialValues)
+              setValues(initialValues)
+            }}
+          >
+            恢复默认参数
+          </Button>
         </Space>
 
         <Modal
