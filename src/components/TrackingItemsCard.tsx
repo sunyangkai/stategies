@@ -34,17 +34,17 @@ export function TrackingItemsCard({ trackingItems }: TrackingItemsCardProps) {
       render: (value: string) => <Text strong>{value}</Text>,
     },
     {
-      title: '为什么最重要',
+      title: '为什么重要',
       dataIndex: 'whyImportant',
       key: 'whyImportant',
-      width: 320,
+      width: 220,
       render: (value: string) => <Text className="tracking-item-text">{value}</Text>,
     },
     {
       title: '看什么口径 / 怎么判断',
       dataIndex: 'evaluationMethod',
       key: 'evaluationMethod',
-      width: 420,
+      width: 260,
       render: (value: string) => <Text className="tracking-item-text">{value}</Text>,
     },
     {
@@ -60,11 +60,32 @@ export function TrackingItemsCard({ trackingItems }: TrackingItemsCardProps) {
     <Card className="report-card" title={trackingItems.title}>
       <Table<TrackingItem>
         rowKey={(record) => `${record.rank}-${record.target}`}
+        className="detail-expand-table"
         columns={columns}
         dataSource={trackingItems.items}
         pagination={false}
         size="small"
-        scroll={{ x: 1290 }}
+        scroll={{ x: 1030 }}
+        expandable={{
+          expandedRowRender: (record) => (
+            <div className="table-expanded-detail-stack">
+              <div className="table-expanded-detail">
+                <Text strong className="table-expanded-detail-label">
+                  为什么重要
+                </Text>
+                <Text className="tracking-item-text">{record.whyImportant}</Text>
+              </div>
+              <div className="table-expanded-detail">
+                <Text strong className="table-expanded-detail-label">
+                  看什么口径 / 怎么判断
+                </Text>
+                <Text className="tracking-item-text">{record.evaluationMethod}</Text>
+              </div>
+            </div>
+          ),
+          expandedRowKeys: trackingItems.items.map((item) => `${item.rank}-${item.target}`),
+          showExpandColumn: false,
+        }}
       />
     </Card>
   )

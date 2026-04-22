@@ -139,13 +139,6 @@ export function ProfitForecastCard({ forecast }: ProfitForecastCardProps) {
       width: 140,
       render: (value: string) => <Text strong>{value}</Text>,
     },
-    {
-      title: '详细理由',
-      dataIndex: 'rationale',
-      key: 'rationale',
-      width: 760,
-      render: (value: string) => <Text className="profit-bridge-text">{value}</Text>,
-    },
   ]
 
   const annualBridgeColumns: ColumnsType<AnnualProfitBridgeRow> = [
@@ -257,12 +250,25 @@ export function ProfitForecastCard({ forecast }: ProfitForecastCardProps) {
             <Text strong>我的合理预期</Text>
             <Table<PersonalProfitExpectationRow>
               rowKey="condition"
+              className="detail-expand-table"
               style={{ marginTop: 12 }}
               columns={personalExpectationColumns}
               dataSource={forecast.personalExpectationRows}
               pagination={false}
               size="small"
-              scroll={{ x: 1740 }}
+              scroll={{ x: 980 }}
+              expandable={{
+                expandedRowRender: (record) => (
+                  <div className="table-expanded-detail">
+                    <Text strong className="table-expanded-detail-label">
+                      详细理由
+                    </Text>
+                    <Text className="profit-bridge-text">{record.rationale}</Text>
+                  </div>
+                ),
+                expandedRowKeys: forecast.personalExpectationRows.map((item) => item.condition),
+                showExpandColumn: false,
+              }}
             />
           </div>
         ) : null}
