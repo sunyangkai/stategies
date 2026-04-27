@@ -41,7 +41,7 @@ V_0
 \\[1.2em]
 R = r_f + 5.5\%
 \\[0.8em]
-g_{\infty}=\displaystyle \frac{m}{1+0.35m}
+g_{\infty}=\displaystyle \frac{0.35m}{1+0.35m}\times 0.04
 \\[1.0em]
 DP_0 = NP_{adj,0} + DA_0 - MC_0 - \Delta WC^{norm}_0
 \\[0.8em]
@@ -101,20 +101,23 @@ $$
 ### 4.3 终局增速
 
 $$
-g_{\infty}=\frac{m}{1+0.35m}
+g_{\infty}=\frac{0.35m}{1+0.35m}\times 0.04
 $$
 
 其中：
 
-- $m$：名义 GDP 增速  
+- $m$：名义 GDP 增速的数字输入值，例如 4 表示 4%  
 
-备注：当前默认取 $m = 4.0\%$。
+备注：当前默认取 $m = 4$，即名义 GDP 增速输入为数字形式。
+
+按当前默认参数，终局增速约为 $g_{\infty} \approx 2.33\%$。
 
 含义：
 
 - 成熟企业终局增长受宏观约束；
 - 企业只能分享宏观增长的一部分；
-- 宏观越快增长，成熟企业并不能同比例分得全部增量。  
+- 宏观越快增长，成熟企业并不能同比例分得全部增量；
+- 其中 $0.04$ 表示当前模型设定的永续最大增速上限，即当宏观增速很高时，成熟企业的终局增速也不会无限上升，而是渐近收敛到 4%。  
 
 ### 4.4 当前可分配利润
 
@@ -160,7 +163,26 @@ $$
 - 过渡期与终值占比通常较高，经验上约为 85%；
 - 因此整体估值折价，采用当前兑现系数与长期兑现系数的加权平均。  
 
-### 4.7 股东估值
+### 4.7 成熟阶段兑现系数参考取值
+
+$\theta_x$ 的取值不追求精确，而追求稳定、保守、可比较。建议按以下顺序确定：
+
+1. **优先取公司自身成熟年份中枢值**：选取公司经营稳定、无明显扩张扰动的年份，计算  
+   $$
+   \theta = \frac{DP}{NP_{adj}}
+   $$
+   再取 3—5 年中枢水平作为 $\theta_x$。  
+
+2. **若公司自身样本不足，则取成熟同行中枢值**：选择商业模式接近、资本开支和营运资本特征相近的成熟公司，取其正常年份的 $DP / NP_{adj}$ 中枢。  
+
+3. **若两者都不充分，则用保守经验值**：  
+   - 轻资产、高现金转化行业：$\theta_x \approx 0.85 \sim 0.95$  
+   - 一般制造业：$\theta_x \approx 0.70 \sim 0.85$  
+   - 重资产、强营运资本占用行业：$\theta_x \approx 0.50 \sim 0.70$  
+
+核心原则是：**$\theta_x$ 反映成熟阶段利润兑现为股东价值的长期中枢比例，应取正常经营状态下的保守值，而非某一年的高点值。**
+
+### 4.8 股东估值
 
 $$
 V_0^* = V_0 \cdot \theta
@@ -217,71 +239,86 @@ $$
 
 ### 说明
 
-- `np1`、`np2`、`np3` 为**前三年调整后利润预测**；
+- 函数参数拆分为两个对象：`company` 与 `macro`；
+- `company.growthForecasts` 为**未来三年利润增速预测数组**，格式为 `[g1, g2, g3]`；
+- 函数内部默认当前利润 `np0 = 1`，因此最终直接返回 **PE**；
 - 程序**不负责**自动计算当前可分配利润 $DP_0$；
-- `theta0` 由外部分析得到，对应公式：$\theta_0 = DP_0 / NP_{adj,0}$；
-- `thetaX` 为成熟阶段或长期阶段兑现系数，由分析后输入；
-- 当前默认参数：`rf = 0.018`，`nominalGdpGrowth = 0.04`；
+- `company.theta0` 由外部分析得到，对应公式：$	heta_0 = DP_0 / NP_{adj,0}$；
+- `company.thetaX` 为成熟阶段或长期阶段兑现系数，由分析后输入；
+- 当前宏观参数默认取值可为：`macro.rf = 0.018`，`macro.nominalGdpGrowth = 4`；
 - 程序只负责：
-  - 根据前三年利润计算基础估值；
+  - 根据三年利润增速预测生成前三年利润路径；
   - 根据第三年增长率生成过渡期；
   - 根据统一终局增速计算终值；
-  - 根据 $\theta = 0.15\theta_0 + 0.85\theta_x$ 计算整体折价。  
+  - 根据 $	heta = 0.15	heta_0 + 0.85	heta_x$ 计算整体折价；
+  - 最终只返回 **PE**。  
 
 ---
 
-## 七、JavaScript 实现
+## 七、JavaScript 实现(这是给AI计算调用的程序)
 
 ```js
 /**
  * 三段式利润估值 + 整体兑现折价
  *
  * 约定：
- * 1. np1、np2、np3 为你先分析后输入的“前三年调整后利润”
- * 2. 程序不负责计算 DP0 = NP_adj,0 + DA0 - MC0 - ΔWC^norm,0
- * 3. theta0 由外部分析得到：theta0 = DP0 / NP_adj,0
- * 4. thetaX 为成熟阶段或长期阶段兑现系数
- * 5. 过渡期按“第三年增长率线性衰减，终值起点收敛到终局增速”处理
+ * 1. company.growthForecasts 为未来三年利润增速预测 [g1, g2, g3]
+ * 2. 函数内部默认当前利润 np0 = 1，因此最终直接返回 PE
+ * 3. 程序不负责计算 DP0 = NP_adj,0 + DA0 - MC0 - ΔWC^norm,0
+ * 4. company.theta0 由外部分析得到：theta0 = DP0 / NP_adj,0
+ * 5. company.thetaX 为成熟阶段或长期阶段兑现系数
+ * 6. 过渡期按“第三年增长率线性衰减，终值起点收敛到终局增速”处理
  *
  * @param {Object} params
- * @param {number} params.np1 - 第1年调整后利润
- * @param {number} params.np2 - 第2年调整后利润
- * @param {number} params.np3 - 第3年调整后利润
- * @param {number} params.rf - 无风险利率，例如 0.02
- * @param {number} params.nominalGdpGrowth - 名义 GDP 增速 m，例如 0.05
- * @param {number} params.theta0 - 当前兑现系数
- * @param {number} params.thetaX - 长期兑现系数
- * @param {number} [params.equityRiskPremium=0.055] - 固定股权风险补偿，默认 5.5%
- * @param {number} [params.transitionYears=3] - 过渡期年数，默认 3 年，此时 N=6
- * @param {number} [params.nearTermWeight=0.15] - 前三年权重，默认 15%
- * @param {number} [params.longTermWeight=0.85] - 长期权重，默认 85%
- * @returns {Object}
+ * @param {Object} params.company - 公司层面参数
+ * @param {number[]} params.company.growthForecasts - 三年利润增速预测 [g1, g2, g3]
+ * @param {number} params.company.theta0 - 当前兑现系数
+ * @param {number} params.company.thetaX - 长期兑现系数
+ * @param {number} [params.company.transitionYears=3] - 过渡期年数，默认 3 年
+ * @param {number} [params.company.nearTermWeight=0.15] - 前三年权重，默认 15%
+ * @param {number} [params.company.longTermWeight=0.85] - 长期权重，默认 85%
+ *
+ * @param {Object} params.macro - 宏观层面参数
+ * @param {number} params.macro.rf - 无风险利率，例如 0.018
+ * @param {number} params.macro.nominalGdpGrowth - 名义 GDP 增速 m 的数字输入，例如 4 表示 4%
+ * @param {number} [params.macro.equityRiskPremium=0.055] - 固定股权风险补偿，默认 5.5%
+ *
+ * @returns {number} finalPe
  */
-function calculateIntrinsicValue({
-  np1,
-  np2,
-  np3,
-  rf,
-  nominalGdpGrowth,
-  theta0,
-  thetaX,
-  equityRiskPremium = 0.055,
-  transitionYears = 3,
-  nearTermWeight = 0.15,
-  longTermWeight = 0.85,
-}) {
-  const nums = {
-    np1,
-    np2,
-    np3,
-    rf,
-    nominalGdpGrowth,
+function calculateIntrinsicPe({ company, macro }) {
+  const {
+    growthForecasts,
     theta0,
     thetaX,
-    equityRiskPremium,
+    transitionYears = 3,
+    nearTermWeight = 0.15,
+    longTermWeight = 0.85,
+  } = company || {};
+
+  const {
+    rf,
+    nominalGdpGrowth,
+    equityRiskPremium = 0.055,
+  } = macro || {};
+
+  if (!Array.isArray(growthForecasts) || growthForecasts.length !== 3) {
+    throw new Error("company.growthForecasts 必须是长度为 3 的数组，例如 [0.12, 0.10, 0.08]");
+  }
+
+  const [g1, g2, g3] = growthForecasts;
+
+  const nums = {
+    g1,
+    g2,
+    g3,
+    theta0,
+    thetaX,
     transitionYears,
     nearTermWeight,
     longTermWeight,
+    rf,
+    nominalGdpGrowth,
+    equityRiskPremium,
   };
 
   for (const [key, value] of Object.entries(nums)) {
@@ -290,23 +327,30 @@ function calculateIntrinsicValue({
     }
   }
 
-  if (transitionYears < 0 || !Number.isInteger(transitionYears)) {
+  if (!Number.isInteger(transitionYears) || transitionYears < 0) {
     throw new Error("transitionYears 必须是大于等于 0 的整数");
   }
 
-  const weightSum = nearTermWeight + longTermWeight;
-  if (Math.abs(weightSum - 1) > 1e-8) {
+  if (Math.abs(nearTermWeight + longTermWeight - 1) > 1e-8) {
     throw new Error("nearTermWeight 与 longTermWeight 之和必须等于 1");
   }
 
-  const R = rf + equityRiskPremium;
-  const gInfinity = nominalGdpGrowth / (1 + 0.35 * nominalGdpGrowth);
-
-  if (R <= gInfinity) {
-    throw new Error("折现率 R 必须大于终局增速 g∞，否则终值公式无意义");
+  if (g1 <= -1 || g2 <= -1 || g3 <= -1) {
+    throw new Error("growthForecasts 中每个增速都必须大于 -1；当前版本不考虑亏损情形");
   }
 
-  const g3 = np2 === 0 ? 0 : np3 / np2 - 1;
+  const R = rf + equityRiskPremium;
+  const gInfinity = (0.35 * nominalGdpGrowth / (1 + 0.35 * nominalGdpGrowth)) * 0.04;
+
+  if (R <= gInfinity) {
+    throw new Error("折现率 R 必须大于终局增速 g∞");
+  }
+
+  // 内部标准化：np0 = 1
+  const np0 = 1;
+  const np1 = np0 * (1 + g1);
+  const np2 = np1 * (1 + g2);
+  const np3 = np2 * (1 + g3);
 
   const pvFirst3 =
     np1 / Math.pow(1 + R, 1) +
@@ -324,6 +368,10 @@ function calculateIntrinsicValue({
     const prevProfit = profitSeries[profitSeries.length - 1];
     const currentProfit = prevProfit * (1 + gt);
 
+    if (currentProfit <= 0) {
+      throw new Error("过渡期利润小于等于 0；当前版本不考虑亏损情形");
+    }
+
     profitSeries.push(currentProfit);
     pvTransition += currentProfit / Math.pow(1 + R, t);
   }
@@ -334,39 +382,10 @@ function calculateIntrinsicValue({
   const terminalValue = npN1 / (R - gInfinity);
   const pvTerminal = terminalValue / Math.pow(1 + R, N);
 
-  const baseValue = pvFirst3 + pvTransition + pvTerminal;
+  const basePe = pvFirst3 + pvTransition + pvTerminal;
   const theta = nearTermWeight * theta0 + longTermWeight * thetaX;
-  const equityValue = baseValue * theta;
 
-  return {
-    equityValue,
-    baseValue,
-    theta,
-    breakdown: {
-      pvFirst3,
-      pvTransition,
-      pvTerminal,
-      terminalValue,
-    },
-    assumptions: {
-      R,
-      gInfinity,
-      g3,
-      theta0,
-      thetaX,
-      nearTermWeight,
-      longTermWeight,
-      rf,
-      equityRiskPremium,
-      nominalGdpGrowth,
-      transitionYears,
-      N,
-    },
-    profitSeries: profitSeries.map((profit, index) => ({
-      year: index + 1,
-      profit,
-    })),
-  };
+  return basePe * theta;
 }
 ```
 
@@ -375,18 +394,20 @@ function calculateIntrinsicValue({
 ## 八、调用示例
 
 ```js
-const result = calculateIntrinsicValue({
-  np1: 10,
-  np2: 12,
-  np3: 14,
-  rf: 0.02,
-  nominalGdpGrowth: 0.05,
-  theta0: 0.72,
-  thetaX: 0.85,
-  transitionYears: 3,
+const finalPe = calculateIntrinsicPe({
+  company: {
+    growthForecasts: [0.12, 0.12, 0.12],
+    theta0: 0.9,
+    thetaX: 0.9,
+    transitionYears: 3,
+  },
+  macro: {
+    rf: 0.018,
+    nominalGdpGrowth: 4,
+  },
 });
 
-console.log(result);
+console.log(finalPe);
 ```
 
 ---

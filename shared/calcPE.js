@@ -1,8 +1,6 @@
 export function calcPE({
   np0,
   g = [],
-  da = [],
-  capex = [],
   rf,
   erp = 0.055,
   M,
@@ -12,8 +10,6 @@ export function calcPE({
   const R = rf + erp
   const gT = (gMax * (0.35 * M)) / (1 + 0.35 * M)
   const [g1, g2, g3] = g
-  const [capex1, capex2, capex3] = capex
-  const [da1, da2, da3] = da
 
   if (R <= gT) {
     throw new Error('R 必须大于 gT')
@@ -23,9 +19,9 @@ export function calcPE({
   const np2 = np1 * (1 + g2)
   const np3 = np2 * (1 + g3)
 
-  const fcf1 = np1 + da1 - capex1
-  const fcf2 = np2 + da2 - capex2
-  const fcf3 = np3 + da3 - capex3
+  const fcf1 = np1
+  const fcf2 = np2
+  const fcf3 = np3
 
   const excess = Math.max(g3 - gT, 0)
   const g4 = gT + 0.75 * excess
